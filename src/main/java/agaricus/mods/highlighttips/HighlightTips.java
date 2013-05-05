@@ -119,7 +119,7 @@ public class HighlightTips implements ITickHandler {
         String s;
 
         if (mop == null) {
-            s = "nothing";
+            return;
         } else if (mop.typeOfHit == EnumMovingObjectType.ENTITY) {
             // TODO: find out why this apparently never triggers
             s = "entity " + mop.entityHit.getClass().getName();

@@ -10,6 +10,8 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 
@@ -22,6 +24,25 @@ public class HighlightTips implements ITickHandler {
     @Mod.PreInit
     public void preInit(FMLPreInitializationEvent event) {
         TickRegistry.registerTickHandler(this, Side.CLIENT);
+    }
+
+    private String describeBlock(int id, int meta) {
+        Block block = Block.blocksList[id];
+        StringBuilder sb = new StringBuilder();
+
+        if (block == null) {
+            return "block #"+id;
+        }
+
+        sb.append(block.getLocalizedName());
+
+        sb.append(' ');
+
+        ItemStack itemStack = new ItemStack(id, 1, meta);
+
+        sb.append(itemStack.getDisplayName());
+
+        return sb.toString();
     }
 
     @Override
@@ -38,13 +59,13 @@ public class HighlightTips implements ITickHandler {
         if (mop == null) {
             s = "nothing";
         } else if (mop.typeOfHit == EnumMovingObjectType.ENTITY) {
+            // TODO: find out why this apparently never triggers
             s = "entity " + mop.entityHit.getClass().getName();
         } else if (mop.typeOfHit == EnumMovingObjectType.TILE) {
             int id = mc.thePlayer.worldObj.getBlockId(mop.blockX, mop.blockY, mop.blockZ);
             int meta = mc.thePlayer.worldObj.getBlockMetadata(mop.blockX, mop.blockY, mop.blockZ);
 
-            s = Block.blocksList[id].getLocalizedName();
-
+            s = describeBlock(id, meta);
         } else {
             s = "unknown";
         }

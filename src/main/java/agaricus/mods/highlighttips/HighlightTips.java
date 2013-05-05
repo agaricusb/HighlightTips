@@ -38,12 +38,20 @@ public class HighlightTips implements ITickHandler {
         sb.append(':');
         sb.append(meta);
         sb.append(' ');
-        sb.append(block.getLocalizedName());
+        String blockName = block.getLocalizedName();
+        sb.append(blockName);
 
         sb.append("  ");
         int itemDamage = block.damageDropped(meta);
         ItemStack itemStack = new ItemStack(id, 1, itemDamage);
-        sb.append(itemStack.getDisplayName());
+        String itemName = itemStack.getDisplayName();
+        if (!blockName.equals(itemName)) {
+            sb.append(itemName);
+        }
+        if (itemDamage != meta) {
+            sb.append(' ');
+            sb.append(itemDamage);
+        }
 
         return sb.toString();
     }

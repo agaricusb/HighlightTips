@@ -95,10 +95,12 @@ public class HighlightTips implements ITickHandler {
         sb.append("  ");
         int itemDamage = block.damageDropped(meta);
 
-        ItemStack itemStack = new ItemStack(id, 1, itemDamage);
-        String itemName = itemStack.getDisplayName();
-        if (!blockName.equals(itemName)) {
-            sb.append(itemName);
+        if (Item.itemsList[id + 256] != null) {
+            ItemStack itemStack = new ItemStack(id, 1, itemDamage);
+            String itemName = itemStack.getDisplayName();
+            if (!blockName.equals(itemName)) {
+                sb.append(itemName);
+            }
         }
         if (itemDamage != meta) {
             sb.append(' ');

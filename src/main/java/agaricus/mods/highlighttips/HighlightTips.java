@@ -13,6 +13,7 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
@@ -93,6 +94,7 @@ public class HighlightTips implements ITickHandler {
         // item info, if it was mined (this often has more user-friendly information, but sometimes is identical)
         sb.append("  ");
         int itemDamage = block.damageDropped(meta);
+
         ItemStack itemStack = new ItemStack(id, 1, itemDamage);
         String itemName = itemStack.getDisplayName();
         if (!blockName.equals(itemName)) {
@@ -127,7 +129,12 @@ public class HighlightTips implements ITickHandler {
             int id = mc.thePlayer.worldObj.getBlockId(mop.blockX, mop.blockY, mop.blockZ);
             int meta = mc.thePlayer.worldObj.getBlockMetadata(mop.blockX, mop.blockY, mop.blockZ);
 
-            s = describeBlock(id, meta);
+            try {
+                s = describeBlock(id, meta);
+            } catch (Throwable t) {
+                s = id + ":" + meta + "  - " + t;
+                t.printStackTrace();
+            }
         } else {
             s = "unknown";
         }

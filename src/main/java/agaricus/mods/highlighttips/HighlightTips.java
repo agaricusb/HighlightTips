@@ -7,8 +7,11 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MovingObjectPosition;
 
 import java.util.EnumSet;
 
@@ -27,10 +30,29 @@ public class HighlightTips implements ITickHandler {
         GuiScreen screen = mc.currentScreen;
         if (screen != null) return;
 
+        double range = 300;
+        float partialTickTime = 1;
+        MovingObjectPosition mop = mc.thePlayer.rayTrace(range, partialTickTime);
+        String s;
+
+        if (mop == null) {
+            s = "nothing";
+        } else if (mop.typeOfHit == EnumMovingObjectType.ENTITY) {
+            s = "entity " + mop.entityHit.getClass().getName();
+        } else if (mop.typeOfHit == EnumMovingObjectType.TILE) {
+            int id = mc.thePlayer.worldObj.getBlockId(mop.blockX, mop.blockY, mop.blockZ);
+            int meta = mc.thePlayer.worldObj.getBlockMetadata(mop.blockX, mop.blockY, mop.blockZ);
+
+            s = Block.blocksList[id].getLocalizedName();
+
+        } else {
+            s = "unknown";
+        }
+
         int x = 0;
         int y = 0;
         int color = 0xffffff;
-        mc.fontRenderer.drawStringWithShadow("hello world", x, y, color);
+        mc.fontRenderer.drawStringWithShadow(s, x, y, color);
     }
 
     @Override

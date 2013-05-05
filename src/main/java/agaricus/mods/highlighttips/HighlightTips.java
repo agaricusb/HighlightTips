@@ -1,5 +1,7 @@
 package agaricus.mods.highlighttips;
 
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.TickType;
@@ -14,16 +16,38 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraftforge.common.Configuration;
 
 import java.util.EnumSet;
+import java.util.logging.Level;
 
 @Mod(modid = "HighlightTips", name = "HighlightTips", version = "1.0-SNAPSHOT") // TODO: version from resource
 @NetworkMod(clientSideRequired = false, serverSideRequired = false)
 public class HighlightTips implements ITickHandler {
 
+    private static final int DEFAULT_KEY_TOGGLE = 62; // F4 - see http://www.minecraftwiki.net/wiki/Key_codes
+
+    private int keyToggle = DEFAULT_KEY_TOGGLE;
+    private ToggleKeyHandler toggleKeyHandler;
+
     @Mod.PreInit
     public void preInit(FMLPreInitializationEvent event) {
+        Configuration cfg = new Configuration(event.getSuggestedConfigurationFile());
+
+        try {
+            cfg.load();
+
+            keyToggle = cfg.get(Configuration.CATEGORY_GENERAL, "key.toggle", DEFAULT_KEY_TOGGLE).getInt(DEFAULT_KEY_TOGGLE);
+        } catch (Exception e) {
+            FMLLog.log(Level.SEVERE, e, "HighlightTips had a problem loading it's configuration");
+        } finally {
+            cfg.save();
+        }
+
         TickRegistry.registerTickHandler(this, Side.CLIENT);
+
+        toggleKeyHandler = new ToggleKeyHandler(keyToggle);
+        KeyBindingRegistry.registerKeyBinding(toggleKeyHandler);
     }
 
     private String describeBlock(int id, int meta) {
@@ -34,6 +58,7 @@ public class HighlightTips implements ITickHandler {
             return "block #"+id;
         }
 
+        // block info
         sb.append(id);
         sb.append(':');
         sb.append(meta);
@@ -41,6 +66,7 @@ public class HighlightTips implements ITickHandler {
         String blockName = block.getLocalizedName();
         sb.append(blockName);
 
+        // item info, if it was mined (this often has more user-friendly information, but sometimes is identical)
         sb.append("  ");
         int itemDamage = block.damageDropped(meta);
         ItemStack itemStack = new ItemStack(id, 1, itemDamage);
@@ -58,6 +84,8 @@ public class HighlightTips implements ITickHandler {
 
     @Override
     public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+        if (!toggleKeyHandler.showInfo) return;
+
         Minecraft mc = Minecraft.getMinecraft();
         GuiScreen screen = mc.currentScreen;
         if (screen != null) return;

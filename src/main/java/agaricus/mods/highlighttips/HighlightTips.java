@@ -8,6 +8,7 @@ import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.FMLRelauncher;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -59,7 +60,15 @@ public class HighlightTips implements ITickHandler {
             cfg.save();
         }
 
-        if (!enable) return; // in case something really goes wrong..
+        if (!FMLRelauncher.side().equals("CLIENT")) {
+            // gracefully disable on non-client (= server) instead of crashing
+            enable = false;
+        }
+
+        if (!enable) {
+            FMLLog.log(Level.INFO, "HighlightTips disabled");
+            return;
+        }
 
         TickRegistry.registerTickHandler(this, Side.CLIENT);
         KeyBindingRegistry.registerKeyBinding(toggleKeyHandler = new ToggleKeyHandler(keyToggle));

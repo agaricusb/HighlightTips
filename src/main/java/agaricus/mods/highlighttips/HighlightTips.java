@@ -42,6 +42,11 @@ public class HighlightTips implements ITickHandler {
 
         sb.append(itemStack.getDisplayName());
 
+        sb.append(' ');
+        sb.append(id);
+        sb.append(':');
+        sb.append(meta);
+
         return sb.toString();
     }
 

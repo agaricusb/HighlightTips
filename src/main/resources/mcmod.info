@@ -1,0 +1,20 @@
+[
+{
+  "modid": "HighlightTips",
+  "name": "HighlightTips",
+  "description": "",
+  "version": "${project.version}",
+  "mcversion": "${minecraft.version}",
+  "url": "http://github.com/agaricusb/HighlightTips",
+  "updateUrl": "",
+  "authors": [
+    "agaricus"
+  ],
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  "mod_MinecraftForge",
+  ]
+}
+]

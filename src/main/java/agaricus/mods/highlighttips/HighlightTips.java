@@ -26,8 +26,18 @@ import java.util.logging.Level;
 public class HighlightTips implements ITickHandler {
 
     private static final int DEFAULT_KEY_TOGGLE = 62; // F4 - see http://www.minecraftwiki.net/wiki/Key_codes
+    private static final double DEFAULT_RANGE = 300;
+    private static final int DEFAULT_X = 0;
+    private static final int DEFAULT_Y = 0;
+    private static final int DEFAULT_COLOR = 0xffffff;
 
+    private boolean enable = true;
     private int keyToggle = DEFAULT_KEY_TOGGLE;
+    private double range = DEFAULT_RANGE;
+    private int x = DEFAULT_X;
+    private int y = DEFAULT_Y;
+    private int color = DEFAULT_COLOR;
+
     private ToggleKeyHandler toggleKeyHandler;
 
     @Mod.PreInit
@@ -37,17 +47,22 @@ public class HighlightTips implements ITickHandler {
         try {
             cfg.load();
 
+            enable = cfg.get(Configuration.CATEGORY_GENERAL, "enable", true).getBoolean(true);
             keyToggle = cfg.get(Configuration.CATEGORY_GENERAL, "key.toggle", DEFAULT_KEY_TOGGLE).getInt(DEFAULT_KEY_TOGGLE);
+            range = cfg.get(Configuration.CATEGORY_GENERAL, "range", DEFAULT_RANGE).getDouble(DEFAULT_RANGE);
+            x = cfg.get(Configuration.CATEGORY_GENERAL, "x", DEFAULT_X).getInt(DEFAULT_X);
+            y = cfg.get(Configuration.CATEGORY_GENERAL, "y", DEFAULT_Y).getInt(DEFAULT_Y);
+            color = cfg.get(Configuration.CATEGORY_GENERAL, "color", DEFAULT_COLOR).getInt(DEFAULT_COLOR);
         } catch (Exception e) {
             FMLLog.log(Level.SEVERE, e, "HighlightTips had a problem loading it's configuration");
         } finally {
             cfg.save();
         }
 
-        TickRegistry.registerTickHandler(this, Side.CLIENT);
+        if (!enable) return; // in case something really goes wrong..
 
-        toggleKeyHandler = new ToggleKeyHandler(keyToggle);
-        KeyBindingRegistry.registerKeyBinding(toggleKeyHandler);
+        TickRegistry.registerTickHandler(this, Side.CLIENT);
+        KeyBindingRegistry.registerKeyBinding(toggleKeyHandler = new ToggleKeyHandler(keyToggle));
     }
 
     private String describeBlock(int id, int meta) {
@@ -90,7 +105,6 @@ public class HighlightTips implements ITickHandler {
         GuiScreen screen = mc.currentScreen;
         if (screen != null) return;
 
-        double range = 300;
         float partialTickTime = 1;
         MovingObjectPosition mop = mc.thePlayer.rayTrace(range, partialTickTime);
         String s;
@@ -109,9 +123,6 @@ public class HighlightTips implements ITickHandler {
             s = "unknown";
         }
 
-        int x = 0;
-        int y = 0;
-        int color = 0xffffff;
         mc.fontRenderer.drawStringWithShadow(s, x, y, color);
     }
 

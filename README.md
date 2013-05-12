@@ -1,4 +1,4 @@
-HighlightTips
+# HighlightTips
 
 A simple client mod for Minecraft to show the block name highlighted at your cursor tip:
 
@@ -7,6 +7,12 @@ A simple client mod for Minecraft to show the block name highlighted at your cur
 The block ID and metadata is shown, followed by the block name, the item name dropped, and finally the item damage value.
 
 Latest builds for download at Buildhive: [![Build Status](https://buildhive.cloudbees.com/job/agaricusb/job/HighlightTips/badge/icon)](https://buildhive.cloudbees.com/job/agaricusb/job/HighlightTips/)
+
+Compilation:
+
+* Install [Maven](http://maven.apache.org/)
+* `mvn initialize -P -built`
+* `mvn package`
 
 
 See also:

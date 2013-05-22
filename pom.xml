@@ -3,8 +3,8 @@
   <groupId>agaricus.mods</groupId>
   <artifactId>HighlightTips</artifactId>
   <version>1.1-SNAPSHOT</version>
-  <name>OreDupeFix</name>
-  <url>http://github.com/agaricusb/OreDupeFix</url>
+  <name>HighlightTips</name>
+  <url>http://github.com/agaricusb/HighlightTips</url>
 
   <parent>
     <groupId>net.md-5</groupId>

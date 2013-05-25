@@ -13,11 +13,15 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 
 import java.util.EnumSet;
@@ -93,22 +97,35 @@ public class HighlightTips implements ITickHandler {
 
         // item info, if it was mined (this often has more user-friendly information, but sometimes is identical)
         sb.append("  ");
-        int itemDamage = block.damageDropped(meta);
+        int itemDropDamage = block.damageDropped(meta);
 
         if (Item.itemsList[id + 256] != null) {
-            ItemStack itemStack = new ItemStack(id, 1, itemDamage);
-            String itemName = itemStack.getDisplayName();
-            if (!blockName.equals(itemName)) {
-                sb.append(itemName);
+            ItemStack itemDropStack = new ItemStack(id, 1, itemDropDamage);
+            String itemDropName = itemDropStack.getDisplayName();
+            if (!blockName.equals(itemDropName)) {
+                sb.append(itemDropName);
+            }
+
+            // item info guess if item damage corresponds to block metadata, not necessarily if mined - sometimes more informative
+            try {
+                ItemStack itemMetaStack = new ItemStack(id, 1, meta);
+                String itemMetaName = itemMetaStack.getDisplayName();
+                if (itemMetaName != null && !blockName.equals(itemMetaName) && !itemDropName.equals(itemMetaName)) {
+                    sb.append(' ');
+                    sb.append(itemMetaName);
+                }
+            } catch (Throwable t) {
+
             }
         }
-        if (itemDamage != meta) {
+        if (itemDropDamage != meta) {
             sb.append(' ');
-            sb.append(itemDamage);
+            sb.append(itemDropDamage);
         }
 
         return sb.toString();
     }
+
 
     @Override
     public void tickEnd(EnumSet<TickType> type, Object... tickData) {

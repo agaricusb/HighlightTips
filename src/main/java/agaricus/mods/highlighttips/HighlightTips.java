@@ -100,15 +100,19 @@ public class HighlightTips implements ITickHandler {
         if (te instanceof IInventory) {
             IInventory inventory = (IInventory) te;
 
-            sb.append(" IInventory: ");
+            sb.append(isDetailed() ? " IInventory: " : " Inventory: ");
+
             sb.append(inventoryName(inventory));
-            sb.append(" (");
-            sb.append(inventory.getSizeInventory());
-            sb.append(" slots)");
+
+            if (isDetailed()) {
+                sb.append(" (");
+                sb.append(inventory.getSizeInventory());
+                sb.append(" slots)");
+            }
         }
 
         if (te instanceof ITankContainer) {
-            sb.append(" ITankContainer: ");
+            sb.append(isDetailed() ? " ITankContainer: " : " ");
 
             ILiquidTank[] tanks = ((ITankContainer) te).getTanks(ForgeDirection.UP);
             for (ILiquidTank tank : tanks) {
@@ -117,12 +121,14 @@ public class HighlightTips implements ITickHandler {
                 //sb.append(tank.getTankPressure()); // TODO: tank capacity *used*? this is not it..
                 //sb.append('/');
                 sb.append(tank.getCapacity());
-                int pressure = tank.getTankPressure();
-                if (pressure < 0) {
-                    sb.append(pressure);
-                } else {
-                    sb.append('+');
-                    sb.append(pressure);
+                if (isDetailed()) {
+                    int pressure = tank.getTankPressure();
+                    if (pressure < 0) {
+                        sb.append(pressure);
+                    } else {
+                        sb.append('+');
+                        sb.append(pressure);
+                    }
                 }
                 sb.append(' ');
             }
@@ -131,14 +137,18 @@ public class HighlightTips implements ITickHandler {
         if (te instanceof TileEntityMobSpawner) {
             MobSpawnerBaseLogic logic = ((TileEntityMobSpawner) te).func_98049_a();
 
-            sb.append(" Spawner: ");
+            sb.append(isDetailed() ? " TileEntityMobSpawner: " : " ");
             sb.append(logic.getEntityNameToSpawn());
-            sb.append(' ');
-            sb.append(logic.spawnDelay);
+            if (isDetailed()) {
+                sb.append(' ');
+                sb.append(logic.spawnDelay);
+            }
         }
 
-        sb.append(' ');
-        sb.append(te.getClass().getName());
+        if (isDetailed()) {
+            sb.append(' ');
+            sb.append(te.getClass().getName());
+        }
     }
 
     private String inventoryName(IInventory inventory) {
@@ -227,6 +237,10 @@ public class HighlightTips implements ITickHandler {
         }
         Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
         return par1World.rayTraceBlocks_do_do(vec3, vec31, false, false); // "ray traces all blocks, including non-collideable ones"
+    }
+
+    private boolean isDetailed() {
+        return toggleKeyHandler.isDetailed();
     }
 
     @Override

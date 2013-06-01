@@ -24,6 +24,10 @@ public class ToggleKeyHandler extends KeyBindingRegistry.KeyHandler {
         return detailLevel != DetailLevel.HIDDEN;
     }
 
+    public boolean isDetailed() {
+        return detailLevel == DetailLevel.DETAILED;
+    }
+
     @Override
     public String getLabel() {
         return "HighlightTips Toggle Key";

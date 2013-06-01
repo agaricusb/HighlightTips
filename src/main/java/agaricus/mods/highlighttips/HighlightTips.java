@@ -96,25 +96,30 @@ public class HighlightTips implements ITickHandler {
     private void describeTileEntity(StringBuilder sb, TileEntity te) {
         if (te == null) return;
 
+        sb.append(te.getClass().getName());
+        sb.append(' ');
+
         if (te instanceof ITankContainer) {
             sb.append(" ITankContainer: ");
             ITankContainer tankContainer = (ITankContainer) te;
 
             ILiquidTank[] tanks = ((ITankContainer) te).getTanks(ForgeDirection.UP);
             for (ILiquidTank tank : tanks) {
-                sb.append("capacity=" + tank.getCapacity());
-                sb.append(" pressure=" + tank.getTankPressure());
-                sb.append(" liquid=" + describeLiquidStack(tank.getLiquid()));
-                sb.append("  ");
+                sb.append(describeLiquidStack(tank.getLiquid()));
+                sb.append(' ');
+                sb.append(tank.getTankPressure()); // TODO: tank capacity *used*? this is not it..
+                sb.append('/');
+                sb.append(tank.getCapacity());
+                sb.append(' ');
             }
         }
     }
 
     private String describeLiquidStack(LiquidStack liquidStack) {
-        if (liquidStack == null) return "null";
+        if (liquidStack == null) return "Empty";
 
         ItemStack itemStack = liquidStack.canonical().asItemStack();
-        if (itemStack == null) return "null";
+        if (itemStack == null) return "Empty";
 
         return itemStack.getDisplayName();
     }

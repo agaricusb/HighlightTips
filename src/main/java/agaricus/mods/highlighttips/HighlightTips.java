@@ -20,10 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.EnumMovingObjectType;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.ForgeDirection;
@@ -98,9 +95,6 @@ public class HighlightTips implements ITickHandler {
     private void describeTileEntity(StringBuilder sb, TileEntity te) {
         if (te == null) return;
 
-        sb.append(te.getClass().getName());
-        sb.append(' ');
-
         if (te instanceof ITankContainer) {
             sb.append(" ITankContainer: ");
 
@@ -126,9 +120,21 @@ public class HighlightTips implements ITickHandler {
             IInventory inventory = (IInventory) te;
 
             sb.append(" IInventory: ");
+            sb.append(inventoryName(inventory));
+            sb.append(" (");
             sb.append(inventory.getSizeInventory());
-            sb.append(' ');
-            sb.append(inventory.getInvName());
+            sb.append(" slots)");
+        }
+
+        sb.append(' ');
+        sb.append(te.getClass().getName());
+    }
+
+    private String inventoryName(IInventory inventory) {
+        if (!inventory.isInvNameLocalized()) {
+            return StatCollector.translateToLocal(inventory.getInvName());
+        } else {
+            return inventory.getInvName();
         }
     }
 

@@ -120,15 +120,6 @@ public class HighlightTips implements ITickHandler {
                 sb.append(' ');
             }
         }
-
-        if (te instanceof TileEntityFurnace) {
-            TileEntityFurnace furnace = (TileEntityFurnace) te;
-
-            sb.append(" TileEntityFurnace: ");
-            sb.append(furnace.getBurnTimeRemainingScaled(100));
-            sb.append(' ');
-            sb.append(furnace.getCookProgressScaled(100));
-        }
     }
 
     private String describeLiquidStack(LiquidStack liquidStack) {

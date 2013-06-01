@@ -29,6 +29,7 @@ import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidStack;
 
+import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.logging.Level;
 
@@ -118,6 +119,21 @@ public class HighlightTips implements ITickHandler {
                 }
                 sb.append(' ');
             }
+            return;
+        }
+
+        try {
+            Class clazz = Class.forName("gregtechmod.api.metatileentity.BaseMetaTileEntity"); // TODO: avoid reflection
+
+            if (te.getClass().isInstance(clazz)) {
+                sb.append(" gregtech: ");
+            }
+            Method method = te.getClass().getMethod("getDescription");
+            String description = (String) method.invoke(te);
+
+            sb.append(description);
+        } catch (Throwable t) {
+
         }
     }
 

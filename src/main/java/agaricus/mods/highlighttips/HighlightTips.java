@@ -152,10 +152,16 @@ public class HighlightTips implements ITickHandler {
     }
 
     private String inventoryName(IInventory inventory) {
+        if (inventory == null) return "";
+
+        String name = inventory.getInvName();
+
+        if (name == null) return "";
+
         if (!inventory.isInvNameLocalized()) {
-            return StatCollector.translateToLocal(inventory.getInvName());
+            return StatCollector.translateToLocal(name);
         } else {
-            return inventory.getInvName();
+            return name;
         }
     }
 

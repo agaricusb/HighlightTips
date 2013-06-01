@@ -24,6 +24,10 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.liquids.ILiquidTank;
+import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidStack;
 
 import java.util.EnumSet;
 import java.util.logging.Level;
@@ -84,8 +88,35 @@ public class HighlightTips implements ITickHandler {
         StringBuilder sb = new StringBuilder();
 
         describeBlockID(sb, id, meta);
+        describeTileEntity(sb, tileEntity);
 
         return sb.toString();
+    }
+
+    private void describeTileEntity(StringBuilder sb, TileEntity te) {
+        if (te == null) return;
+
+        if (te instanceof ITankContainer) {
+            sb.append(" ITankContainer: ");
+            ITankContainer tankContainer = (ITankContainer) te;
+
+            ILiquidTank[] tanks = ((ITankContainer) te).getTanks(ForgeDirection.UP);
+            for (ILiquidTank tank : tanks) {
+                sb.append("capacity=" + tank.getCapacity());
+                sb.append(" pressure=" + tank.getTankPressure());
+                sb.append(" liquid=" + describeLiquidStack(tank.getLiquid()));
+                sb.append("  ");
+            }
+        }
+    }
+
+    private String describeLiquidStack(LiquidStack liquidStack) {
+        if (liquidStack == null) return "null";
+
+        ItemStack itemStack = liquidStack.canonical().asItemStack();
+        if (itemStack == null) return "null";
+
+        return itemStack.getDisplayName();
     }
 
     private void describeBlockID(StringBuilder sb, int id, int meta) {

@@ -137,7 +137,6 @@ public class HighlightTips implements ITickHandler {
             sb.append(logic.spawnDelay);
         }
 
-
         sb.append(' ');
         sb.append(te.getClass().getName());
     }
@@ -232,7 +231,7 @@ public class HighlightTips implements ITickHandler {
 
     @Override
     public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-        if (!toggleKeyHandler.showInfo) return;
+        if (!toggleKeyHandler.isVisible()) return;
 
         Minecraft mc = Minecraft.getMinecraft();
         GuiScreen screen = mc.currentScreen;

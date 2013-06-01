@@ -8,10 +8,20 @@ import java.util.EnumSet;
 
 public class ToggleKeyHandler extends KeyBindingRegistry.KeyHandler {
 
-    public boolean showInfo = true;
+    enum DetailLevel {
+        HIDDEN,
+        MINIMAL,
+        DETAILED,
+    };
+
+    private DetailLevel detailLevel = DetailLevel.MINIMAL;
 
     public ToggleKeyHandler(int keyCode) {
         super(new KeyBinding[] { new KeyBinding("Highlight Tips", keyCode) }, new boolean[] { false });
+    }
+
+    public boolean isVisible() {
+        return detailLevel != DetailLevel.HIDDEN;
     }
 
     @Override
@@ -23,7 +33,18 @@ public class ToggleKeyHandler extends KeyBindingRegistry.KeyHandler {
     public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
         if (!tickEnd) return;
 
-        showInfo = !showInfo;
+        switch (detailLevel) {
+            case HIDDEN:
+                detailLevel = DetailLevel.MINIMAL;
+                break;
+            default:
+            case MINIMAL:
+                detailLevel = DetailLevel.DETAILED;
+                break;
+            case DETAILED:
+                detailLevel = DetailLevel.HIDDEN;
+                break;
+        }
     }
 
     @Override

@@ -33,7 +33,7 @@ import net.minecraftforge.liquids.LiquidStack;
 import java.util.EnumSet;
 import java.util.logging.Level;
 
-@Mod(modid = "HighlightTips", name = "HighlightTips", version = "1.0-SNAPSHOT") // TODO: version from resource
+@Mod(modid = "HighlightTips", name = "HighlightTips", version = "2.0") // TODO: version from resource
 @NetworkMod(clientSideRequired = false, serverSideRequired = false)
 public class HighlightTips implements ITickHandler {
 

@@ -1,3 +1,14 @@
+2013/06/01  2.0 The Liquid Update
+    * Show liquid block names, raytrace as buckets
+    * Show liquid contents and capacity in ITankContainers (BuildCraft tanks, etc.)
+    * Show inventory name in IInventory tile entities
+    * Show creature name and spawn delay for monster spawners
+    * Show tile entity name in detailed mode
+    * Show item name with same damage as block metadata, if it differs from damageDropped
+    * Add detailed mode, shows more information, off by default, togglable with Shift-F4
+    * Add cycling between hidden/minimal/detailed with F4, toggle visibility with Control-F4
+    * Hide "You ran into a serious Bug, if you have legitly acquired this Block, please report it immidietly" name from GregTech
+    * Update build for Minecraft 1.5.2 (also compatible with 1.5.1)
 
 2013/05/11  1.0 https://bitbucket.org/agaricusb/highlighttips/downloads/HighlightTips-1.0.jar
     * Initial release

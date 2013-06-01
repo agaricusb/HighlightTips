@@ -175,8 +175,8 @@ public class HighlightTips implements ITickHandler {
         }
     }
 
-    // copied from net/minecraft/item/Item since it is needlessly protected
-    protected MovingObjectPosition getMovingObjectPositionFromPlayer(World par1World, EntityPlayer par2EntityPlayer, boolean isBucketEmpty)
+    // based on net/minecraft/item/Item, copied since it is needlessly protected
+    protected MovingObjectPosition getMovingObjectPositionFromPlayer(World par1World, EntityPlayer par2EntityPlayer)
     {
         float f = 1.0F;
         float f1 = par2EntityPlayer.prevRotationPitch + (par2EntityPlayer.rotationPitch - par2EntityPlayer.prevRotationPitch) * f;
@@ -197,7 +197,7 @@ public class HighlightTips implements ITickHandler {
             d3 = ((EntityPlayerMP)par2EntityPlayer).theItemInWorldManager.getBlockReachDistance();
         }
         Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
-        return par1World.rayTraceBlocks_do_do(vec3, vec31, isBucketEmpty, !isBucketEmpty);
+        return par1World.rayTraceBlocks_do_do(vec3, vec31, false, false); // "ray traces all blocks, including non-collideable ones"
     }
 
     @Override
@@ -209,7 +209,7 @@ public class HighlightTips implements ITickHandler {
         if (screen != null) return;
 
         float partialTickTime = 1;
-        MovingObjectPosition mop = getMovingObjectPositionFromPlayer(mc.theWorld, mc.thePlayer, true);
+        MovingObjectPosition mop = getMovingObjectPositionFromPlayer(mc.theWorld, mc.thePlayer);
         String s;
 
         if (mop == null) {

@@ -18,10 +18,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
@@ -135,6 +132,14 @@ public class HighlightTips implements ITickHandler {
             sb.append(logic.getEntityNameToSpawn());
             sb.append(' ');
             sb.append(logic.spawnDelay);
+        }
+
+        if (te instanceof TileEntityNote) {
+            TileEntityNote note = (TileEntityNote) te;
+            sb.append(" Note: ");
+            sb.append(note.note);
+            sb.append(' ');
+            sb.append(note.previousRedstoneState ? '*' : ' ');
         }
 
 

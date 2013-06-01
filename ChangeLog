@@ -1,4 +1,4 @@
-2013/06/01  2.0 The Liquid Update
+2013/06/01  2.0 The Liquid Update https://bitbucket.org/agaricusb/highlighttips/downloads/HighlightTips-2.0.jar
     * Show liquid block names, raytrace as buckets
     * Show liquid contents and capacity in ITankContainers (BuildCraft tanks, etc.)
     * Show inventory name in IInventory tile entities

@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -118,6 +119,16 @@ public class HighlightTips implements ITickHandler {
                 }
                 sb.append(' ');
             }
+        }
+
+        if (te instanceof TileEntityFurnace) {
+            TileEntityFurnace furnace = (TileEntityFurnace) te;
+
+            sb.append(" TileEntityFurnace: ");
+            int totalTime = furnace.furnaceBurnTime + furnace.furnaceCookTime;
+            sb.append(furnace.furnaceCookTime);
+            sb.append('/');
+            sb.append(totalTime);
         }
     }
 

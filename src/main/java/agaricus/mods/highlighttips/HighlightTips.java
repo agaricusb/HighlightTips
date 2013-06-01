@@ -125,10 +125,9 @@ public class HighlightTips implements ITickHandler {
             TileEntityFurnace furnace = (TileEntityFurnace) te;
 
             sb.append(" TileEntityFurnace: ");
-            int totalTime = furnace.furnaceBurnTime + furnace.furnaceCookTime;
-            sb.append(furnace.furnaceCookTime);
-            sb.append('/');
-            sb.append(totalTime);
+            sb.append(furnace.getBurnTimeRemainingScaled(100));
+            sb.append(' ');
+            sb.append(furnace.getCookProgressScaled(100));
         }
     }
 

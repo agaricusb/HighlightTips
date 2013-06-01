@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -119,6 +120,15 @@ public class HighlightTips implements ITickHandler {
                 }
                 sb.append(' ');
             }
+        }
+
+        if (te instanceof IInventory) {
+            IInventory inventory = (IInventory) te;
+
+            sb.append(" IInventory: ");
+            sb.append(inventory.getSizeInventory());
+            sb.append(' ');
+            sb.append(inventory.getInvName());
         }
     }
 

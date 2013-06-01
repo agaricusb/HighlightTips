@@ -101,15 +101,21 @@ public class HighlightTips implements ITickHandler {
 
         if (te instanceof ITankContainer) {
             sb.append(" ITankContainer: ");
-            ITankContainer tankContainer = (ITankContainer) te;
 
             ILiquidTank[] tanks = ((ITankContainer) te).getTanks(ForgeDirection.UP);
             for (ILiquidTank tank : tanks) {
                 sb.append(describeLiquidStack(tank.getLiquid()));
                 sb.append(' ');
-                sb.append(tank.getTankPressure()); // TODO: tank capacity *used*? this is not it..
-                sb.append('/');
+                //sb.append(tank.getTankPressure()); // TODO: tank capacity *used*? this is not it..
+                //sb.append('/');
                 sb.append(tank.getCapacity());
+                int pressure = tank.getTankPressure();
+                if (pressure < 0) {
+                    sb.append(pressure);
+                } else {
+                    sb.append('+');
+                    sb.append(pressure);
+                }
                 sb.append(' ');
             }
         }

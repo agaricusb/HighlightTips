@@ -161,7 +161,8 @@ public class HighlightTips implements ITickHandler {
         sb.append(meta);
         sb.append(' ');
         String blockName = block.getLocalizedName();
-        sb.append(blockName);
+        if (!blockName.startsWith("You ran into")) // a serious Bug, if you have legitly acquired this Block, please report it immidietly"
+            sb.append(blockName);
 
         // item info, if it was mined (this often has more user-friendly information, but sometimes is identical)
         sb.append("  ");

@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -79,12 +80,20 @@ public class HighlightTips implements ITickHandler {
         KeyBindingRegistry.registerKeyBinding(toggleKeyHandler = new ToggleKeyHandler(keyToggle));
     }
 
-    private String describeBlock(int id, int meta) {
-        Block block = Block.blocksList[id];
+    private String describeBlock(int id, int meta, TileEntity tileEntity) {
         StringBuilder sb = new StringBuilder();
 
+        describeBlockID(sb, id, meta);
+
+        return sb.toString();
+    }
+
+    private void describeBlockID(StringBuilder sb, int id, int meta) {
+        Block block = Block.blocksList[id];
+
         if (block == null) {
-            return "block #"+id;
+            sb.append("block #"+id);
+            return;
         }
 
         // block info
@@ -122,8 +131,6 @@ public class HighlightTips implements ITickHandler {
             sb.append(' ');
             sb.append(itemDropDamage);
         }
-
-        return sb.toString();
     }
 
     // copied from net/minecraft/item/Item since it is needlessly protected
@@ -137,7 +144,7 @@ public class HighlightTips implements ITickHandler {
         double d2 = par2EntityPlayer.prevPosZ + (par2EntityPlayer.posZ - par2EntityPlayer.prevPosZ) * (double)f;
         Vec3 vec3 = par1World.getWorldVec3Pool().getVecFromPool(d0, d1, d2);
         float f3 = MathHelper.cos(-f2 * 0.017453292F - (float) Math.PI);
-        float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
+        float f4 = MathHelper.sin(-f2 * 0.017453292F - (float) Math.PI);
         float f5 = -MathHelper.cos(-f1 * 0.017453292F);
         float f6 = MathHelper.sin(-f1 * 0.017453292F);
         float f7 = f4 * f5;
@@ -171,13 +178,16 @@ public class HighlightTips implements ITickHandler {
         } else if (mop.typeOfHit == EnumMovingObjectType.TILE) {
             int id = mc.thePlayer.worldObj.getBlockId(mop.blockX, mop.blockY, mop.blockZ);
             int meta = mc.thePlayer.worldObj.getBlockMetadata(mop.blockX, mop.blockY, mop.blockZ);
+            TileEntity tileEntity = mc.thePlayer.worldObj.blockHasTileEntity(mop.blockX, mop.blockY, mop.blockZ) ? mc.thePlayer.worldObj.getBlockTileEntity(mop.blockX, mop.blockY, mop.blockZ) : null;
 
             try {
-                s = describeBlock(id, meta);
+                s = describeBlock(id, meta, tileEntity);
             } catch (Throwable t) {
                 s = id + ":" + meta + "  - " + t;
                 t.printStackTrace();
             }
+
+
         } else {
             s = "unknown";
         }

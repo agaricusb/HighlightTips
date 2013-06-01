@@ -95,6 +95,16 @@ public class HighlightTips implements ITickHandler {
     private void describeTileEntity(StringBuilder sb, TileEntity te) {
         if (te == null) return;
 
+        if (te instanceof IInventory) {
+            IInventory inventory = (IInventory) te;
+
+            sb.append(" IInventory: ");
+            sb.append(inventoryName(inventory));
+            sb.append(" (");
+            sb.append(inventory.getSizeInventory());
+            sb.append(" slots)");
+        }
+
         if (te instanceof ITankContainer) {
             sb.append(" ITankContainer: ");
 
@@ -116,15 +126,6 @@ public class HighlightTips implements ITickHandler {
             }
         }
 
-        if (te instanceof IInventory) {
-            IInventory inventory = (IInventory) te;
-
-            sb.append(" IInventory: ");
-            sb.append(inventoryName(inventory));
-            sb.append(" (");
-            sb.append(inventory.getSizeInventory());
-            sb.append(" slots)");
-        }
 
         sb.append(' ');
         sb.append(te.getClass().getName());
